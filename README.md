@@ -2,7 +2,9 @@
 
 TF1230 source files. 
 
-Released int Creative Commons CC-BY-ND license. 
+Released in Creative Commons CC-BY-ND license. 
+
+This is a NO DERIVATIVES LICENSE. You cannot modify it and distribute the modified version.
 
 TF1230 is distributed with absolutely no warranty. If you make a mistake you could blow up your A1200. I take no responsibility for this. 
 
