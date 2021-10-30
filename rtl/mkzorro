@@ -1,0 +1,78 @@
+#!/usr/bin/python
+
+address = 0
+default = 0xF
+
+def outNybble(x):
+    global address
+    global default
+    if (address >= 2):
+        x = ~x & 0xF
+    if (x != default):
+        print "'h%02x: data_out[7:4] <= 4'h%x;" % (address, x & 0x0F)
+    address+=1
+    
+def outByte(x):
+    outNybble(x >> 4)
+    outNybble(x & 0x0F)
+
+def outShort(x):
+    outByte(x >> 8)
+    outByte(x & 0xFF)
+
+def outLong(x):
+    outShort(x >> 16)
+    outShort(x & 0xFFFF)
+    
+rom = "0xE6 0x51 0x80 0x00 0x07 0xDB 0x00 0x00 0x00 0x01 0x00 0x00 0x00 0x00 0x00 0x00"
+
+memavailable = 0x20
+related_to_next = 0x08;
+versions = {"Z2": 0xC0, "Z3": 0x80}
+sizes = {"64K": 0x01, "128K": 0x02, "256K": 0x03, "512K": 0x04, "1M": 0x05, "2M": 0x06, "4M": 0x07, "8M": 0x00}
+extended_sizes = {"16M": 0x00, "32M": 0x01, "64M": 0x02, "128M": 0x03, "256M": 0x04, "512M": 0x05, "1G": 0x06}    
+
+eFlags = 0x80
+eManuID = 5080
+eSerial = 330
+eRomVector = 0
+
+def ramConfig(size):
+    global address
+    address = 0
+    eType = 0xa4
+    eProduct = 0x01
+    eFlags = 0xb1
+    print "case (zaddr)"
+    outByte(eType)
+    outByte(eProduct)
+    outByte(eFlags)
+    outByte(0x00) #reserved
+    outShort(eManuID)
+    outLong(eSerial)
+    outShort(eRomVector)
+    outLong(0x00) #reserved
+    print "default: data_out[7:4] <= 4'h%x;" % (default)
+    print "endcase"
+
+
+def sdCardConfig():
+    global address
+    address = 0
+    eType = versions["Z2"] | sizes["64K"]
+    eProduct = 0x81
+    print "case (zaddr)"
+    outByte(eType)
+    outByte(eProduct)
+    outByte(eFlags)
+    outByte(0x00) #reserved
+    outShort(eManuID)
+    outLong(eSerial)
+    outShort(eRomVector)
+    outLong(0x00) #reserved
+    print "default: data_out[7:4] <= 4'h%x;" % (default)
+    print "endcase"
+
+
+ramConfig("256M")
+#sdCardConfig()

@@ -1,0 +1,140 @@
+# Copyright (C) 2016-2017, Stephen J. Leary
+# All rights reserved.
+#
+# This file is part of TF330/TF120 (Terrible Fire 030 Accelerator)
+#
+# TF330/TF120 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# TF330/TF120 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with TF330. If not, see <http://www.gnu.org/licenses/>.
+
+#Clocks
+NET "CLK100M"		LOC="32";
+NET "CLK100M" BUFG=CLK;
+NET "CLK100M" TNM_NET = "CLK100M"; # gives the net clk a group name as CLK100M
+
+NET "CLK14M"		LOC="30";
+NET "CLK14M" BUFG=CLK;
+NET "CLK14M" TNM_NET = "CLK14M"; # gives the net clk a group name as CLK14M
+
+NET "A<0>"      LOC="87";
+NET "A<1>"      LOC="95";
+NET "A<2>"      LOC="128";
+NET "A<3>"      LOC="126";
+NET "A<4>"      LOC="125";
+NET "A<5>"      LOC="124";
+NET "A<6>"      LOC="121";
+NET "A<7>"      LOC="120";
+NET "A<8>"      LOC="119";
+NET "A<9>"      LOC="118";
+NET "A<10>"      LOC="117";
+NET "A<11>"      LOC="116";
+NET "A<12>"      LOC="113";
+NET "A<13>"      LOC="115";
+NET "A<14>"      LOC="112";
+NET "A<15>"      LOC="111";
+NET "A<16>"      LOC="110";
+NET "A<17>"      LOC="107";
+NET "A<18>"      LOC="106";
+NET "A<19>"      LOC="105";
+NET "A<20>"      LOC="104";
+NET "A<21>"      LOC="103";
+NET "A<22>"      LOC="102";
+NET "A<23>"      LOC="101";
+NET "A<24>"      LOC="100";
+NET "A<25>"      LOC="98";
+NET "A<26>"      LOC="97";
+NET "A<27>"      LOC="96";
+NET "A<28>"      LOC="94";
+NET "A<29>"      LOC="93";
+NET "A<30>"      LOC="91";
+NET "A<31>"      LOC="88";
+NET "ACTIVE"      LOC="35";
+NET "ARAM<0>"      LOC="25";
+NET "ARAM<1>"      LOC="26";
+NET "ARAM<2>"      LOC="27";
+NET "ARAM<3>"      LOC="28";
+NET "ARAM<4>"      LOC="14";
+NET "ARAM<5>"      LOC="13";
+NET "ARAM<6>"      LOC="12";
+NET "ARAM<7>"      LOC="11";
+NET "ARAM<8>"      LOC="10";
+NET "ARAM<9>"      LOC="9";
+NET "ARAM<10>"      LOC="24";
+NET "ARAM<11>"      LOC="7";
+NET "ARAM<12>"      LOC="6";
+NET "AS20"      LOC="132";
+NET "AS30"      LOC="74";
+NET "DISABLE"      LOC="39";
+NET AUXGND      LOC="38";
+#NET "AUX<2>"      LOC="40";
+NET "BA<0>"      LOC="23";
+NET "BA<1>"      LOC="22";
+NET "BERR"      LOC="75";
+NET "BG20"      LOC="138";
+NET "BG30"      LOC="86";
+NET "BGACK30"      LOC="92";
+NET "BR20"      LOC="137";
+NET "BR30"      LOC="83";
+NET "CAS"      LOC="19";
+NET "CBACK"      LOC="70";
+NET "CBREQ"      LOC="66";
+NET "CIIN"      LOC="60";
+NET "CLKCPU"      LOC="80";
+NET "CLKRAM"      LOC="4";
+NET "CLKRAME"      LOC="5";
+NET "D<24>"      LOC="52";
+NET "D<25>"      LOC="51";
+NET "D<26>"      LOC="50";
+NET "D<27>"      LOC="49";
+NET "D<28>"      LOC="48";
+NET "D<29>"      LOC="46";
+NET "D<30>"      LOC="45";
+NET "D<31>"      LOC="44";
+NET "DQM<0>"      LOC="16";
+NET "DQM<1>"      LOC="31";
+NET "DQM<2>"      LOC="15";
+NET "DQM<3>"      LOC="3";
+NET "DS20"      LOC="133";
+NET "DS30"      LOC="68";
+NET "DS30ACK<0>"      LOC="79";
+NET "DS30ACK<1>"      LOC="78";
+NET "DSACK<0>"      LOC="135";
+NET "DSACK<1>"      LOC="136";
+NET "EXP_BG"      LOC="139";
+NET "EXP_BR"      LOC="140";
+NET "FC<0>"      LOC="85";
+NET "FC<1>"      LOC="82";
+NET "FC<2>"      LOC="81";
+NET "HALT"      LOC="76";
+NET "IDECS<0>"      LOC="58";
+NET "IDECS<1>"      LOC="59";
+NET "IDEINT"      LOC="57";
+NET "IDELED"      LOC="71";
+NET "IDEWAIT"      LOC="56";
+NET "INT2"      LOC="143";
+NET "IOR"      LOC="54";
+NET "IOW"      LOC="53";
+NET "PUNT"      LOC="142";
+NET "RAMCS"      LOC="21";
+NET "RAMOE"      LOC="2";
+NET "RAMWE"      LOC="17";
+NET "RAS"      LOC="20";
+NET "RESET"      LOC="40";
+NET "RW20"      LOC="134";
+NET "RW30"      LOC="64";
+NET "RXD"      LOC="34";
+NET "RXD_EXT"      LOC="43";
+NET "SIZ<0>"      LOC="61";
+NET "SIZ<1>"      LOC="69";
+NET "STERM"      LOC="77";
+NET "TXD"      LOC="33";
+NET "TXD_EXT"      LOC="41";

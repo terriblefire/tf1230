@@ -1,0 +1,111 @@
+# Project name
+ifndef BOARD
+    $(error BOARD must be defined)
+endif
+
+ifndef REVISION
+    $(error REVISION must be defined)
+endif
+
+ifndef SUBPROJ
+    $(error SUBPROJ must be defined)
+endif
+
+ifndef SOURCES
+    $(error SOURCES must be defined)
+endif
+
+ifndef OPTIMIZE
+       OPTIMIZE:=speed
+endif
+
+ifndef OPTMODE
+       OPTMODE:=Area
+endif
+
+ifndef TARGET
+       TARGET=CD32
+endif
+
+ifndef SERIALNO
+       SERIALNO=330
+endif
+
+PROJECT=$(BOARD)r$(REVISION)_$(SUBPROJ)_top
+
+ifndef TOP
+TOP=$(PROJECT)
+endif
+
+# Part number
+ifndef PART
+PART=XC95144XL-10-TQ144
+endif
+
+# Constraints file
+UCF=./$(BOARD)r$(REVISION)_$(SUBPROJ).ucf
+
+# Path to Xilinx tools, blank if in $PATH, must end in /
+#XILINX=/opt/Xilinx/14.7/ISE_DS/ISE/bin/lin64/
+#XILINX=/opt/Xilinx/10.1/ISE_DS/ISE/bin/lin64/
+XILINX=/opt/Xilinx/10.1/ISE/bin/lin64/
+WD=work
+PN=$(PROJECT)$(JEDEXTRA)
+PB=$(WD)/$(PN)
+# Output configuration file
+OUTPUT=$(PN).svf
+
+XSTFLAGS=-define {$(TARGET) SERIALNO=$(SERIALNO)} -opt_mode $(OPTMODE) -opt_level 2 -verilog2001 YES -keep_hierarchy No -netlist_hierarchy As_Optimized -rtlview Yes -hierarchy_separator / -bus_delimiter <> -case Maintain -fsm_extract NO -fsm_encoding Auto -safe_implementation YES -mux_extract Yes -resource_sharing YES -iobuf YES -pld_mp YES -pld_xp YES -pld_ce YES -wysiwyg NO -equivalent_register_removal YES 
+CPLDFITFLAGS=-slew slow -power std -terminate float -unused float -optimize $(OPTIMIZE) -pterms 50 -loc on -keepio -exhaust -init low
+
+.PHONY: all clean
+
+all: $(PB).tim $(OUTPUT)
+	cp $(PB).jed $(PN).jed
+$(WD):
+	mkdir $(WD)/
+
+$(PB).ngc: $(SOURCES)
+	@[ ! -e $(WD) ] && mkdir $(WD) || true
+	@echo "Generating $(PB).prj..."
+	@rm -f $(PB).prj
+	@for i in $(SOURCES); do \
+		echo "verilog $(PROJECT) $$i" >> $(PB).prj; \
+	done
+	@echo "DEFAULT_SEARCH_ORDER" > $(PB).lso
+	@echo "set -tmpdir $(WD) -xsthdpdir $(WD)" > $(PB).xst
+	@echo "run -ifn $(PB).prj -ifmt mixed -top $(TOP) -ofn $@ -ofmt NGC -p $(PART) $(XSTFLAGS) $(PARAMS) -lso $(PB).lso" >> $(PB).xst
+	$(XILINX)xst -ifn $(PB).xst -ofn $(PB)_xst.log
+
+$(PB).ngd: $(PB).ngc $(UCF)
+	cd $(WD) ; $(XILINX)ngdbuild -p $(PART) -uc ../$(UCF) ../$< ../$@
+
+
+$(PB).vm6: $(PB).ngd
+	cd $(WD) ; $(XILINX)cpldfit $(CPLDFITFLAGS) -p $(PART) ../$<
+
+$(PB).tim: $(PB).vm6
+	cd $(WD) ; $(XILINX)taengine -l ../$@ -detail -f $(PN) ../$<
+
+$(PB).jed: $(PB).vm6
+	cd $(WD) ; $(XILINX)hprep6 -i ../$<
+	@cp $(PB).jed $(OUTPUT)
+
+$(PB).svf: $(PB).jed
+	@echo "Generating $(PB).cmd..."
+	@echo "setmode -bscan" > $(PB).cmd
+	@echo "setcable -p svf -file ../$@" >> $(PB).cmd
+	@echo "addDevice -p 1 -file ../$<" >> $(PB).cmd
+	@echo "erase -p 1 -o" >> $(PB).cmd
+	@echo "program -p 1" >> $(PB).cmd
+	@echo "quit" >> $(PB).cmd
+	cd $(WD) ; $(XILINX)impact -batch $(PN).cmd
+
+%: $(WD)/%
+	@sed -e 's/FREQUENCY .* HZ/FREQUENCY 5E5 HZ/' $< >$@
+	@echo "Output $@ is ready"
+
+clean:
+	rm -rf $(WD) $(OUTPUT) _xmsgs 
+distclean: clean
+	rm -rf *~
